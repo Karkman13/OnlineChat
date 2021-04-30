@@ -19,7 +19,6 @@ namespace OnlineChat.Data
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<ApplicationUser> AppUsers { get; set; }
-
         public DbSet<Chats> Chats { get; set; }
         public DbSet<Pblock_Message> Pblock_Messages { get; set; }
         public DbSet<GBlock_Message> GBlock_Messages { get; set; }
