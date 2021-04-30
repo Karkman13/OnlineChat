@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OnlineChat.Models
 {
-    [Keyless]
+
     public class Pblock_Message
     {
         public int id { get; set; }

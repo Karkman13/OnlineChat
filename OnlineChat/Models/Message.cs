@@ -15,7 +15,7 @@ namespace OnlineChat.Models
         public Message replayed { get; set; }
         
         
-        public ICollection<Message> messages { get; set; }
-        public ICollection<GBlock_Message> gBlock_Messages { get; set; }
+        //public ICollection<Message> messages { get; set; }
+        //public ICollection<GBlock_Message> gBlock_Messages { get; set; }
     }
 }

@@ -30,6 +30,37 @@ namespace OnlineChat.Data
 
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
+            builder.Entity<Message>(entity =>
+            {
+                entity.HasOne(e => e.toroom)
+                .WithMany(m => m.messages);
+
+                entity.HasOne(e => e.sender)
+                .WithMany(m => m.messages);
+            });
+
+            builder.Entity<Chats>(entity =>
+            {
+                entity.HasOne(e => e.userId)
+                .WithMany(m => m.chats);
+
+                entity.HasOne(e => e.roomId)
+                .WithMany(m => m.chats);
+            });
+
+            builder.Entity<Pblock_Message>(entity =>
+            {
+                entity.HasOne(e => e.user_block)
+                .WithMany(m => m.pblock_Messages);
+            });
+
+            builder.Entity<GBlock_Message>(entity =>
+            {
+                entity.HasOne(e => e.groom_block)
+                .WithMany(m => m.gBlock_Messages);
+            });
+
+
             //builder.Entity<Message>(entity =>
             //{
             //    entity.Property(e => e.id).IsRequired();

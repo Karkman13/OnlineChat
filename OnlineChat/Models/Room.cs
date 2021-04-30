@@ -10,9 +10,11 @@ namespace OnlineChat.Models
         public int id { get; set; }
         public string name { get; set; }
         public ApplicationUser adminid { get; set; }
-        //public ICollection<Message> messages { get; set; }
-        //public ICollection<ApplicationUser> users { get; set; }
-        //public ICollection<Message> block_messages { get; set; }
         public bool isGroup { get; set; }
+        public ICollection<GBlock_Message> gBlock_Messages { get; set; }
+        public ICollection<Chats> chats { get; set; }
+        public ICollection<Message> messages { get; set; }
+
+
     }
 }
