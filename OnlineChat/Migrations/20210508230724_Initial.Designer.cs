@@ -10,7 +10,7 @@ using OnlineChat.Data;
 namespace OnlineChat.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210430122655_Initial")]
+    [Migration("20210508230724_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

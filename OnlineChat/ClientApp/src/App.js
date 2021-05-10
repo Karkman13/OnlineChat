@@ -7,7 +7,7 @@ import { Counter } from './components/Counter';
 
 import './custom.css'
 
-export default class App extends Component {
+ class App extends Component {
   static displayName = App.name;
 
   render () {
@@ -20,3 +20,5 @@ export default class App extends Component {
     );
   }
 }
+
+export default App;

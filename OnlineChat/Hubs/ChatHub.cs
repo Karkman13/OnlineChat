@@ -4,20 +4,39 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using OnlineChat.Data;
 using OnlineChat.Models;
 
 namespace OnlineChat.Hubs
 {
-    [Authorize]
+    [AllowAnonymous]
     public class ChatHub : Hub
     {
         private readonly ApplicationDbContext context;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
-        public ChatHub(ApplicationDbContext context)
+        public ChatHub(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             this.context = context;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
+        }
+
+        public async Task GetConsoleM(string username)
+        {
+            System.Diagnostics.Debug.WriteLine("hello worls GG WP");
+            System.Diagnostics.Debug.WriteLine(username);
+            var user = new ApplicationUser { UserName = username };
+            var newuser = await userManager.CreateAsync(user);
+            //await signInManager.SignInAsync(user, isPersistent:false) ;
+            //var result = await signInManager.PasswordSignInAsync(username, "QWEu!t3!tN24wJ!", isPersistent: false, lockoutOnFailure: false);
+            System.Diagnostics.Debug.WriteLine(newuser.Succeeded);
+            //System.Diagnostics.Debug.WriteLine(result.Succeeded);
+
+
         }
 
         public async Task SendToRoom(string roomName, string message)
@@ -46,7 +65,7 @@ namespace OnlineChat.Hubs
             }
         }
 
-        public async Task CreateRoom(string roomName, bool is_group)
+        public async Task CreateRoom(string username, string roomName, bool is_group)
         {
             try
             {
@@ -65,7 +84,7 @@ namespace OnlineChat.Hubs
                 }
                 else
                 {
-                    var user = context.Users.Where(u => u.UserName == IdentityName).FirstOrDefault();
+                    var user = context.Users.Where(u => u.UserName == username).FirstOrDefault();
                     var room = new Room()
                     {
                         name = roomName,
