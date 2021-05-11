@@ -17,6 +17,7 @@ namespace OnlineChat.Hubs
         private readonly ApplicationDbContext context;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private List<Room> _rooms;
 
         public ChatHub(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
@@ -101,13 +102,13 @@ namespace OnlineChat.Hubs
             }
         }
 
-        //public IEnumerable<Room> GetRooms()
-        //{
+        public IEnumerable<Room> GetRooms(string userName)
+        {
 
-        //        var user = context.Users.Where(u => u.UserName == IdentityName).FirstOrDefault();
-        //    var rooms = from r in context.Rooms join c in context.Chats on user.Id equals c.userId;
-        //    return rooms;
-        //}
+            var user = context.Users.Where(u => u.UserName == userName).FirstOrDefault();
+            var rooms = context.Rooms.Where(r => r.adminid == user).ToList();
+            return rooms;
+        }
 
         //public IEnumerable<Message> GetMessageHistory(string roomName)
         //{

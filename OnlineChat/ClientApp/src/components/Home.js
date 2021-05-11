@@ -4,6 +4,7 @@ import {HubConnectionBuilder} from '@microsoft/signalr';
 
 
 
+
 export class Home extends Component {
   constructor(props){
     super(props);
@@ -12,9 +13,9 @@ export class Home extends Component {
       username:"",
       message: "",
       messages: [],
+      rooms: [],
       hubConnection: null,
     };
-    this.handleClick = this.handleClick.bind(this);
   }
   static displayName = Home.name;
   
@@ -32,6 +33,51 @@ export class Home extends Component {
     })
     console.log(this.state.username);
   };
+
+  GetRooms = () =>
+  {
+    try{
+      if(this.state.hubConnection!=null)
+      {
+        console.log("conected");
+        this.state.hubConnection.start().then(()=>{
+          console.log("connected2");
+          this.state.hubConnection.invoke("GetRooms", this.state.username).then(response=>{
+            // this.setState({result}, ()=> this.state.rooms = result);
+            console.log(response);
+          });
+        })
+      }
+    }
+    catch(ex)
+    {
+      console.log(ex);
+    }
+    console.log("some rooms");
+    console.log(this.state.rooms);
+  }
+
+  // Getrooms(){
+  //   this.setState({rooms}, ()=>{
+  //     try{
+  //       if(this.state.hubConnection!=null)
+  //       {
+  //         // this.state.rooms = this.hubConnection.invoke("GetRooms", this.state.username);
+  //         this.hubConnection.invoke("GetRooms", this.state.username).then(function(result){
+  //           for(var i=0; i<result.lenght; i++){
+  //             rooms.Add(result.name)
+  //           }
+  //         })
+  //       }
+  //     }
+  //     catch(ex){
+  //       console.log("err");
+  //     }
+  //   })
+  // }
+
+
+
   sendMessage = () =>{
     
     try{
@@ -49,25 +95,9 @@ export class Home extends Component {
     
   }
 
-  handleClick(){
-    console.log("click");
-    const roomname = window.prompt("Name of room", "");
-    try{
-      if(this.state.hubConnection!=null)
-      {
-
-          this.state.hubConnection.invoke("CreateRoom", this.state.username, "myfirstroom", false);
-       
-        console.log('done');
-      }
-    }
-    catch(ex){
-      console.log("err");
-    }
-  }
-
   render () {
-    this.sendMessage();
+    // this.sendMessage();
+    this.GetRooms();
     // const [connection, setConnection] = useState(null);
 
     // useEffect(()=>{
@@ -93,11 +123,10 @@ export class Home extends Component {
     // connection.invoke("GetConsoleM");
     return (
       <div className="app">
-        <button className="createroom" onClick={this.handleClick} >createroom</button>
         <form method="post">
 
         </form>
-        <SideBar />
+        <SideBar {...this.state}/>
         <div className="main_content">
 
         </div>
