@@ -13,7 +13,13 @@ export class Home extends Component {
       username:"",
       message: "",
       messages: [],
-      rooms: [],
+      rooms: [{
+        id: null,
+        name: null,
+        isGroup: null,
+        gBlockMessages: [],
+        chats: []
+      }],
       hubConnection: null,
     };
   }
@@ -22,7 +28,7 @@ export class Home extends Component {
   componentDidMount = () =>{
     console.log(this.state.username);
     const username =  window.prompt("Your name:", "Grigory Malkov")
-    const hubConnection = new HubConnectionBuilder().withUrl("/chatHub").build();
+    const hubConnection = new HubConnectionBuilder().withUrl("https://localhost:44359/chatHub").build();
 
     this.setState({hubConnection, username}, ()=>{
       this.state.hubConnection.start().then(()=>console.log("connection staetsd")).catch(err=> console.log("error"));
@@ -43,10 +49,13 @@ export class Home extends Component {
         this.state.hubConnection.start().then(()=>{
           console.log("connected2");
           this.state.hubConnection.invoke("GetRooms", this.state.username).then(response=>{
-            // this.setState({result}, ()=> this.state.rooms = result);
+            this.setState((response)=> {this.state.rooms = response});
+            console.log(this.state.rooms);
             console.log(response);
-          });
+          }).catch(ex =>{console.log(ex)});
         })
+       
+
       }
     }
     catch(ex)

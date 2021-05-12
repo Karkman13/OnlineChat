@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using OnlineChat.Data;
 using OnlineChat.Models;
+using System.Text.Json;
 
 namespace OnlineChat.Hubs
 {
@@ -17,7 +18,6 @@ namespace OnlineChat.Hubs
         private readonly ApplicationDbContext context;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
-        private List<Room> _rooms;
 
         public ChatHub(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
@@ -109,6 +109,19 @@ namespace OnlineChat.Hubs
             var rooms = context.Rooms.Where(r => r.adminid == user).ToList();
             return rooms;
         }
+
+        //public IEnumerable<string> GetRooms(string userName)
+        //{
+
+        //    var user = context.Users.Where(u => u.UserName == userName).FirstOrDefault();
+        //    var rooms = context.Rooms.Where(r => r.adminid == user).ToList();
+        //    List<string> roomlist = new List<string>() { "first", "second", "third" };
+        //    List<string> jsons = new List<string>();
+        //    foreach (Room room in rooms)
+        //        jsons.Add(JsonSerializer.Serialize<Room>(room));
+
+        //    return jsons;
+        //}
 
         //public IEnumerable<Message> GetMessageHistory(string roomName)
         //{
