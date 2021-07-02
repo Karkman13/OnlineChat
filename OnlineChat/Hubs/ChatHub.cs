@@ -12,7 +12,7 @@ using System.Text.Json;
 
 namespace OnlineChat.Hubs
 {
-    [AllowAnonymous]
+    [Authorize]
     public class ChatHub : Hub
     {
         private readonly ApplicationDbContext context;
@@ -26,6 +26,10 @@ namespace OnlineChat.Hubs
             this.signInManager = signInManager;
         }
 
+        public string HelloWorld()
+        {
+            return "hello world";
+        }
         public async Task GetConsoleM(string username)
         {
             System.Diagnostics.Debug.WriteLine("hello worls GG WP");
