@@ -25,7 +25,6 @@ class InputComponent extends Component<IProps, IState>{
         this.setState({
             text: event.target.value
         }, ()=> this.props._handleChangeValue(this.state.text, this.props.i));
-        console.log(this.state.text);
     }
 
     render(){

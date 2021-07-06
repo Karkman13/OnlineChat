@@ -13,7 +13,6 @@ namespace OnlineChat.Controllers
 {
     [AllowAnonymous]
     [ApiController]
-    //[Route("[loginlontroller]")]
     [Route("[controller]")]
     public class LoginController : Controller
     {
