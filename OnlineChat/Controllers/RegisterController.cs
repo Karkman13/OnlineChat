@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using OnlineChat.Data;
 using OnlineChat.Models;
 using System;
 using System.Collections.Generic;
@@ -16,18 +18,43 @@ namespace OnlineChat.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ApplicationDbContext _context;
 
-        public RegisterController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+        public RegisterController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _context = context;
         }
-        [HttpGet("sendm")]
-        public string SendM(string username, string email, string passwod)
+        [HttpPost("sendm")]
+        public async Task<ActionResult> SendM(UserData userData)
         {
-            System.Diagnostics.Debug.WriteLine("S O M O T H I N G");
-            return username + email + passwod;
+            var user = new ApplicationUser { UserName = userData.username, Email = userData.email };
+            //var newuser = await _userManager.CreateAsync(user, "QWEu!t3!tN24wJ!");
+            var result = await _userManager.CreateAsync(user, userData.password);
+            if (result.Succeeded)
+            {
+                var loginresult = await _signInManager.PasswordSignInAsync(userData.username, userData.password, isPersistent: false, lockoutOnFailure: false);
+                return new OkResult();
+            }
+            else
+            {
+                List<RegisterError> _registerErrors = new List<RegisterError>();
+                foreach(var error in result.Errors)
+                {
+                    if(error.Code == "DuplicateUserName")
+                    {
+                        _registerErrors.Add(new RegisterError("username", error.Description));
+                    }
+                    if(error.Code == "DuplicateEmail")
+                    {
+                        _registerErrors.Add(new RegisterError("email", error.Description));
+                    }
+                }
+                return new BadRequestObjectResult(_registerErrors);
+            }
         }
+
         [HttpGet("sendmm")]
         public string SendMM()
         {
@@ -37,5 +64,27 @@ namespace OnlineChat.Controllers
         //{
         //    return View();
         //}
+    }
+    public class UserData
+    {
+        public string username { get; set; }
+        public string email { get; set; }
+        public string password { get; set; }
+    }
+
+    public class RegisterError
+    {
+        public string fieldname { get; set; }
+        public string errordescription { get; set; }
+        public RegisterError()
+        {
+
+        }
+
+        public RegisterError(string field, string error)
+        {
+            fieldname = field;
+            errordescription = error;
+        }
     }
 }
